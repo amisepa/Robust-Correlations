@@ -35,9 +35,9 @@ function [rs,ts,CI,pval,outid,h]=skipped_Spearman(varargin)
 % thus for a correlation this is floor(n/2 + 5/2).
 %
 % The method for multiple comparisons correction is described in
-% Rand R. Wilcox, Guillaume A. Rousselet & Cyril R. Pernet (2018) 
-% Improved methods for making inferences about multiple skipped correlations, 
-% Journal of Statistical Computation and Simulation, 88:16, 3116-3131, 
+% Rand R. Wilcox, Guillaume A. Rousselet & Cyril R. Pernet (2018)
+% Improved methods for making inferences about multiple skipped correlations,
+% Journal of Statistical Computation and Simulation, 88:16, 3116-3131,
 % DOI: 10.1080/00949655.2018.1501051
 %
 % See also MCDCOV, IDEALF.
@@ -46,22 +46,29 @@ function [rs,ts,CI,pval,outid,h]=skipped_Spearman(varargin)
 % ---------------------------------------------------
 %  Copyright (C) Corr_toolbox 2017
 
-%% check the data input
+% check paths to subfunctions
+tmp  = which('mcdcov.m');
+if isempty(tmp)
+    tmp = fileparts(which("skipped_Spearman"));
+    addpath(fullfile(tmp,"LIBRA"))
+    addpath(fullfile(tmp,"LIBRA"))
+end
 
-% _if no input simply return the help, otherwise load the data X_
+% check the data input
 if nargin <1
     help skipped_Spearman
     return
 else
     x = varargin{1};
-    [n,p]=size(x);
+    [n,p] = size(x);
 end
 
-% _set the default options_
-method   = 'ECP';
-alphav   = 5/100;
-pairs    = nchoosek([1:p],2);
-nboot    = 599;
+% Defaults
+method  = 'ECP';
+alphav  = 5/100;
+pairs   = nchoosek(1:p,2);
+nboot   = 1000;
+vis     = 1;  
 
 % _check other inputs of the function_
 for inputs = 2:nargin
@@ -78,7 +85,7 @@ end
 
 % _do a quick quality check_
 if isempty(pairs)
-    pairs = nchoosek([1:p],2);
+    pairs = nchoosek(1:p,2);
 end
 
 if size(pairs,2)~=2
@@ -97,16 +104,16 @@ end
 
 % _create a table of resamples_
 if nargout > 2
-  boot_index = 1;
-  while boot_index <= nboot
-      resample = randi(n,n,1);
-      if length(unique(resample)) > 3 % at least 3 different data points
-          boostrap_sampling(:,boot_index) = resample;
-          boot_index = boot_index +1;
-      end
-  end
-  lower_bound = round((alphav*nboot)/2);
-  upper_bound = nboot - lower_bound;
+    boot_index = 1;
+    while boot_index <= nboot
+        resample = randi(n,n,1);
+        if length(unique(resample)) > 3 % at least 3 different data points
+            boostrap_sampling(:,boot_index) = resample;
+            boot_index = boot_index +1;
+        end
+    end
+    lower_bound = round((alphav*nboot)/2);
+    upper_bound = nboot - lower_bound;
 end
 
 % now for each pair to test, get the observed and boostrapped r and t
@@ -117,13 +124,14 @@ end
 rs    = NaN(size(pairs,1),1);
 for outputs = 2:nargout
     if outputs == 2
-    ts    = NaN(size(pairs,1),1);
-elseif outputs == 3
-  CI = NaN(size(pairs,1),2);
-elseif outputs == 4
-  pval  = NaN(size(pairs,1),1);
-elseif outputs == 5
-  outid = cell(size(pairs,1),1);
+        ts    = NaN(size(pairs,1),1);
+    elseif outputs == 3
+        CI = NaN(size(pairs,1),2);
+    elseif outputs == 4
+        pval  = NaN(size(pairs,1),1);
+    elseif outputs == 5
+        outid = cell(size(pairs,1),1);
+    end
 end
 
 % loop for each pair to test
@@ -196,7 +204,8 @@ if nargout == 6
         h = h(reversed_index);
 
         %% quick clean-up of individual p-values
-        pval(pval==0) = 1/nboot;end
+        pval(pval==0) = 1/nboot;
+    end
 
 end
 
