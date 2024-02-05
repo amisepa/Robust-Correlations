@@ -4,7 +4,7 @@ function [rs,ts,CI,pval,outid,h]=skipped_Spearman(varargin)
 % performs a robust Spearman correlation on data cleaned up for bivariate outliers,
 % that is after finding the central point in the distribution using the mid covariance
 % determinant, orthogonal distances are computed to this point, and any data outside the
-% bound defined by the idealf estimator of the interquartile range is removed.
+% bound defined by the ideal estimator of the interquartile range is removed.
 %
 % FORMAT: [rp,tp,CI,pval,outid,h]=skipped_Spearman(X,pairs,method,alphav,p_alpha);
 %
@@ -178,6 +178,7 @@ end
 
 
 %% once we have all the r and t values, we need to adjust for multiple comparisons
+
 if nargout == 6
     if strcmp(method,'ECP')
         if exist('p_alpha','var')
