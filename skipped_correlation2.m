@@ -359,36 +359,7 @@ if fig_flag == 1
     if strcmpi(corr_type,'both') || strcmpi(corr_type,'spearman') || strcmpi(corr_type,'pearson') && p>1
 
         for f = 1:p
-                       
-            % % Plot data 
-            % subplot(3,1,2)
-            % scatter(a{f},b{f},150,'.','MarkerFaceColor',"#0072BD");
-            % hold on;
-            % hh = lsline; 
-            % set(hh,'Color',"#0072BD",'LineWidth',2);
-            % 
-            % % Ellipse
-            % % [XEmin, YEmin] = ellipse(a{f},b{f});
-            % % plot(real(XEmin), real(YEmin),'LineWidth',1);
-            % % MM = [min(XEmin) max(XEmin) min(YEmin) max(YEmin)];
-            % % MM = [];            
-            % 
-            % % Outliers
-            % scatter(x(outid{f}),y(outid{f}),150,'.','MarkerFaceColor',[0.6350 0.0780 0.1840]);
-            % 
-            % % Scale axis
-            % MM2 = [min(x(:,f)) max(x(:,f)) min(y(:,f)) max(y(:,f))];
-            % if isempty(MM); MM = MM2; end
-            % A = floor(min([MM(:,1);MM2(:,1)]) - min([MM(:,1);MM2(:,1)])*0.01);
-            % boot = ceil(max([MM(:,2);MM2(:,2)]) + max([MM(:,2);MM2(:,2)])*0.01);
-            % C = floor(min([MM(:,3);MM2(:,3)]) - min([MM(:,3);MM2(:,3)])*0.01);
-            % D = ceil(max([MM(:,4);MM2(:,4)]) + max([MM(:,4);MM2(:,4)])*0.01);
-            % axis([A boot C D]);
-            % 
-            % set(gca,'Fontsize',14)
-            % xlabel('X','Fontsize',12); ylabel('Y','Fontsize',12);
-            % title('Outlier detection','Fontsize',16);
-    
+                          
             % Plot SPEARMAN
             xrank = tiedrank(a{f},0);
             yrank = tiedrank(b{f},0);
@@ -414,7 +385,7 @@ if fig_flag == 1
             % axis([A boot C D]);
             % set(gca,'Fontsize',14)
     
-            title(sprintf('Spearman r = %g CI = [%g %g]',round(r.Spearman,2),round(CI.Spearman(1),2),round(CI.Spearman(2),2)),'Fontsize',12);  
+            title(sprintf('Spearman''s ρ = %g, 95%% CI [%g, %g]',round(r.Spearman,2),round(CI.Spearman(1),2),round(CI.Spearman(2),2)),'Fontsize',12);  
             xlabel('X','Fontsize',12); ylabel('Y','Fontsize',12);
             box on; set(gca,'Fontsize',12)
 
@@ -430,7 +401,7 @@ if fig_flag == 1
                 hold on; fillhandle=fill(xpoints,filled,[1 0 0]);
                 set(fillhandle,'EdgeColor',[1 0 0],'FaceAlpha',0.2,'EdgeAlpha',0.8);%set edge color
                 
-                % % add histograms of bootstrap
+                % % Add histograms of bootstrap
                 % subplot(1,3,3); k = round(1 + log2(length(rsb(:,f)))); hist(rsb(:,f),k); grid on;
                 % title(['Bootstrapped correlations h=' num2str(hboot(f))],'FontSize',16); hold on
                 % xlabel('boot correlations','FontSize',14);ylabel('frequency','FontSize',14)

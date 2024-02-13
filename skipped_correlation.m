@@ -86,17 +86,19 @@ end
 
 gval = sqrt(chi2inv(0.975,2)); % in fact depends on size(X,2) but here always = 2
 
-%% compute
+% Compute
 for column = 1:p
     if p>1
         fprintf('skipped correlation: processing pair %g \n',column); 
     end
     
     X = [x(:,column) y(:,column)];
+
     % flag bivariate outliers
     flag = bivariate_outliers(X);
+
     % remove outliers
-    vec=1:n;           
+    vec = 1:n;           
     if sum(flag)==0
         outid{column}=[];
     else
@@ -131,10 +133,7 @@ for column = 1:p
     end
 end
 
-%% get h
-
-% the default test of 0 correlation is for alpha = 5%
-
+% Get h. The default test of 0 correlation is for alpha = 5%
 c = 6.947 / n + 2.3197; % valid for n between 10 and 200
 if p == 1
     h.Pearson = abs(tp) >= c;
@@ -143,7 +142,7 @@ else
     h= abs(t) >= c;
 end
 
-%% adjustement for multiple testing using the .95 quantile of Tmax
+% Adjustement for multiple testing using the .95 quantile of Tmax
 if p>1 && p<=10
     switch hypothesis
         
@@ -175,8 +174,7 @@ if p>1 && p<=10
    h = abs(t) >= q; 
 end
 
-
-%% bootstrap
+% Bootstrap
 if nargout > 4
     
     [n,p]=size(a);
@@ -275,7 +273,7 @@ if nargout > 4
     end
 end
     
-%% plot
+% Plot
 if fig_flag ~= 0
     answer = [];
     if p > 1
@@ -430,10 +428,7 @@ end
     
 
 
-end
-
-
-%% ploting with an ellipse around the good data points
+%% Ellipse function
 function [XEmin, YEmin] = ellipse(X, Y)
 
 % Ellipse function - 15th September 2008
@@ -455,7 +450,6 @@ n = size(xo, 2);
 
 area = Inf;
 
-% =================================================================================================================================
 % Find best matching ellipse for any given four anchors in the convex hull
 for t = 0:pi/16:2*pi
     ct0 = cos(t); st0 = sin(t);
@@ -530,8 +524,6 @@ end
 
 % Previous part found the best matching ellipse for any group of 4 points
 % That's fine, but may be there exist better matches using groups of 3 points
-
-% =================================================================================================================================
 % Find best matching ellipse for any given three anchors in the convex hull
 x = xo; y = yo;
 
@@ -597,5 +589,4 @@ for f = 1:n - 2
             end
         end
     end
-end
 end
