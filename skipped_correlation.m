@@ -208,7 +208,8 @@ if nargout > 4
                 rpb(B,column) = sum(detrend(tmp1(table(:,B)),'constant').*detrend(tmp2(table(:,B)),'constant')) ./ ...
                     (sum(detrend(tmp1(table(:,B)),'constant').^2).*sum(detrend(tmp2(table(:,B)),'constant').^2)).^(1/2);
                 coef = pinv([tmp1(table(:,B)) ones(length(a{column}),1)])*tmp2(table(:,B));
-                pslope(B,column) = coef(1); pintercept(B,column) = coef(2,:);
+                pslope(B,column) = coef(1); 
+                pintercept(B,column) = coef(2,:);
             end
         end
     end
