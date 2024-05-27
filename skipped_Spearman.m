@@ -102,7 +102,6 @@ if  ~exist('vis','var') || isempty(vis)
 end
 nboot = 1000; % number of bootrsaps to compute 
 
-
 % Create a table of resamples
 if nargout > 2
     boot_index = 1;
@@ -220,7 +219,7 @@ if vis
     x = X(:,1);
     y = X(:,2);
 
-    figure('Name','Skipped Spearman correlation','Color','w');
+    % figure('Name','Skipped Spearman correlation','Color','w');
 
     % scatter plot
     scatter(x,y,150,'.','MarkerFaceColor',[0 0.4470 0.7410]);
